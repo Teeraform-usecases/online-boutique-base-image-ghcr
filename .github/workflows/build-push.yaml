@@ -11,7 +11,7 @@ jobs:
       contents: read
 
     env:
-      GHCR_IMAGE_OWNER: Teeraform-usecases
+      GHCR_IMAGE_OWNER: teeraform-usecases
 
     steps:
       - name: Checkout Code
