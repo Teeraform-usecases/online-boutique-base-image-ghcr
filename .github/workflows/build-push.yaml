@@ -1,0 +1,60 @@
+name: Build & Push Base Images to GHCR
+
+on:
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
+    env:
+      GHCR_IMAGE_OWNER: ${{ github.repository_owner }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}
+
+      - name: Build and Push Base Java
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: base-java.Dockerfile
+          push: true
+          tags: ghcr.io/${{ env.GHCR_IMAGE_OWNER }}/base-java:17
+
+      - name: Build and Push Base Python
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: base-python.Dockerfile
+          push: true
+          tags: ghcr.io/${{ env.GHCR_IMAGE_OWNER }}/base-python:3.12
+
+      - name: Build and Push Base Node
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: base-node.Dockerfile
+          push: true
+          tags: ghcr.io/${{ env.GHCR_IMAGE_OWNER }}/base-node:16
+
+      - name: Build and Push Base Go
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: base-go.Dockerfile
+          push: true
+          tags: ghcr.io/${{ env.GHCR_IMAGE_OWNER }}/base-go:1.20
