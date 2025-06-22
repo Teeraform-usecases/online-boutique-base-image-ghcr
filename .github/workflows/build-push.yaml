@@ -1,7 +1,7 @@
 name: Build & Push Base Images to GHCR
 
 on:
-  workflow_dispatch:  # Manual trigger
+  workflow_dispatch:  # Allows manual trigger from GitHub UI
 
 jobs:
   build-and-push:
@@ -11,7 +11,7 @@ jobs:
       contents: read
 
     env:
-      GHCR_IMAGE_OWNER: ${{ github.repository_owner }}
+      GHCR_IMAGE_OWNER: Teeraform-usecases
 
     steps:
       - name: Checkout Code
